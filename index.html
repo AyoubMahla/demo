@@ -32,37 +32,33 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;        /* Toujours derrière */
-  opacity: 0.7;      /* Peut ajuster pour plus de visibilité */
-  pointer-events: none; /* Pour ne pas bloquer les clics */
+  z-index: 0;
+  opacity: 0.7;
+  pointer-events: none;
 }
-
 
   /* Loader / Intro */
   #loader {
   position: fixed;
   width: 100%;
   height: 100%;
-  /* background: #0a0a0a; <-- enlever ou réduire l'opacité */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
   flex-direction: column;
-  text-align: center;; /* laisse passer le canvas derrière */
+  text-align: center;
 }
 
 #transitionLoader {
   display: none;
   position: fixed;
   inset: 0;
-  /* background: #0a0a0a; <-- enlever ou réduire l'opacité */
   z-index: 10000;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
-
 
   #logoContainer {
     display: flex;
@@ -119,17 +115,7 @@
     color: #0a0a0a;
   }
 
-  /* Chargement après clic */
-  #transitionLoader {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
+  /* Transition loader */
   .transition-star {
     width: 130px;
     height: 130px;
@@ -243,11 +229,18 @@
   /* Storytelling section */
   #story {
     margin-top: 120px;
-    opacity: 1;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease, transform 1s ease;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     font-size: 1.2rem;
+  }
+
+  #story.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   #story h2 {
@@ -312,14 +305,12 @@
   <div id="heroText">The first spark of ASTROW – Mini Drop Bonnet</div>
 
   <section class="product-section">
-    <!-- Bonnet Noir -->
     <div class="product">
       <img src="blackbeaniefront.png" alt="Bonnet Noir Avant" class="front">
       <img src="blackbeanieback.png" alt="Bonnet Noir Dos" class="back">
       <h2>Black</h2>
     </div>
 
-    <!-- Bonnet Blanc -->
     <div class="product">
       <img src="whitebeaniefront.png" alt="Bonnet Blanc Avant" class="front">
       <img src="whitebeanieback.png" alt="Bonnet Blanc Dos" class="back">
@@ -350,7 +341,7 @@ It’s more than fashion; it’s your reminder to dream big, put in the work, an
 <audio id="introSound" src="song.wav"></audio>
 
 <script>
-  /* === Canvas Particules Amélioré === */
+/* === Canvas Particules === */
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -359,10 +350,10 @@ canvas.height = window.innerHeight;
 let stars = Array.from({ length: 100 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
-  r: Math.random() * 1.5 + 0.5,        // taille variable
-  speed: Math.random() * 0.5 + 0.05,   // vitesse variable
-  alpha: Math.random() * 0.5 + 0.5,    // opacité initiale
-  delta: Math.random() * 0.02 + 0.005  // variation de pulsation
+  r: Math.random() * 1.5 + 0.5,
+  speed: Math.random() * 0.5 + 0.05,
+  alpha: Math.random() * 0.5 + 0.5,
+  delta: Math.random() * 0.02 + 0.005
 }));
 
 let scrollOffset = 0;
@@ -370,12 +361,11 @@ let scrollOffset = 0;
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   stars.forEach(star => {
-    // scintillement
     star.alpha += star.delta;
     if (star.alpha > 1 || star.alpha < 0.3) star.delta = -star.delta;
     ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(star.alpha * 1.8, 1)})`;
-ctx.shadowBlur = 8;             // effet de halo lumineux
-ctx.shadowColor = "white";      // halo blanc pur
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = "white";
     ctx.beginPath();
     ctx.arc(star.x, star.y + scrollOffset * 0.1, star.r, 0, 2 * Math.PI);
     ctx.fill();
@@ -397,74 +387,68 @@ window.addEventListener('resize', () => {
   canvas.height = window.innerHeight;
 });
 
+/* === Loader / Transition === */
+const enterBtn = document.getElementById('enterBtn');
+const loader = document.getElementById('loader');
+const main = document.getElementById('main');
+const transitionLoader = document.getElementById('transitionLoader');
+const introSound = document.getElementById('introSound');
 
-  /* === Loader / Transition === */
-  const enterBtn = document.getElementById('enterBtn');
-  const loader = document.getElementById('loader');
-  const main = document.getElementById('main');
-  const transitionLoader = document.getElementById('transitionLoader');
-  const introSound = document.getElementById('introSound');
-
-  enterBtn.addEventListener('click', () => {
-    introSound.play();
-    loader.style.transition = "opacity 0.8s ease";
-    loader.style.opacity = 0;
+enterBtn.addEventListener('click', () => {
+  introSound.play();
+  loader.style.transition = "opacity 0.8s ease";
+  loader.style.opacity = 0;
+  setTimeout(() => {
+    loader.style.display = "none";
+    transitionLoader.style.display = "flex";
     setTimeout(() => {
-      loader.style.display = "none";
-      transitionLoader.style.display = "flex";
+      transitionLoader.style.transition = "opacity 1s ease";
+      transitionLoader.style.opacity = 0;
       setTimeout(() => {
-        transitionLoader.style.transition = "opacity 1s ease";
-        transitionLoader.style.opacity = 0;
-        setTimeout(() => {
-          transitionLoader.style.display = "none";
-          main.style.display = "block";
-        }, 1000);
-      }, 3000);
-    }, 800);
-  });
+        transitionLoader.style.display = "none";
+        main.style.display = "block";
+      }, 1000);
+    }, 3000);
+  }, 800);
+});
 
-  /* === Storytelling Scroll === */
-  window.addEventListener('scroll', () => {
-    const story = document.getElementById('story');
-    if (window.scrollY + window.innerHeight > story.offsetTop + 100) {
-      story.classList.add('visible');
-    }
-  });
+/* === Storytelling Scroll === */
+window.addEventListener('scroll', () => {
+  const story = document.getElementById('story');
+  if (window.scrollY + window.innerHeight > story.offsetTop + 100) {
+    story.classList.add('visible');
+  }
+});
 
-  /* === Shop Now Popup === */
-  const ctaBtn = document.getElementById('ctaBtn');
-  const shopPopup = document.getElementById('shopPopup');
-  const confirmShop = document.getElementById('confirmShop');
-  const cancelShop = document.getElementById('cancelShop');
+/* === Shop Now Popup === */
+const ctaBtn = document.getElementById('ctaBtn');
+const shopPopup = document.getElementById('shopPopup');
+const confirmShop = document.getElementById('confirmShop');
+const cancelShop = document.getElementById('cancelShop');
 
-  ctaBtn.addEventListener('click', () => {
-    shopPopup.style.display = 'flex';
-  });
+ctaBtn.addEventListener('click', () => {
+  shopPopup.style.display = 'flex';
+});
 
-  confirmShop.addEventListener('click', () => {
-    window.location.href = "https://yourshopifystore.com";
-  });
+confirmShop.addEventListener('click', () => {
+  window.location.href = "https://yourshopifystore.com";
+});
 
-  cancelShop.addEventListener('click', () => {
-    shopPopup.style.display = 'none';
-  });
+cancelShop.addEventListener('click', () => {
+  shopPopup.style.display = 'none';
+});
 
-  /* === Easter Egg Logo Redirection === */
+/* === Easter Egg Logo Redirection === */
 const logoContainer = document.getElementById('logoContainer');
 let clickCount = 0;
 logoContainer.addEventListener('click', () => {
   clickCount++;
   if (clickCount === 3) {
-    // Redirection vers le lien secret
     window.location.href = "https://tonliensecret.com";
-    clickCount = 0; // reset compteur
+    clickCount = 0;
   }
 });
 </script>
 
 </body>
 </html>
-
-
-
-
