@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASTROW - Mini Drop</title>
 <style>
-  /* Reset */
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* Import police OTF */
   @font-face {
     font-family: 'AstrowFont';
     src: url('AstrowFont.ttf') format('opentype');
@@ -25,40 +23,26 @@
     overflow-x: hidden;
   }
 
-  /* === Canvas Particules === */
-#particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  opacity: 0.7;
-  pointer-events: none;
-}
+  #particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    opacity: 0.7;
+    pointer-events: none;
+  }
 
-  /* Loader / Intro */
+  /* Loader */
   #loader {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  flex-direction: column;
-  text-align: center;
-}
-
-#transitionLoader {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999;
+    text-align: center;
+  }
 
   #logoContainer {
     display: flex;
@@ -81,21 +65,14 @@
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg);}
-    100% { transform: rotate(360deg);}
+    from { transform: rotate(0); }
+    to { transform: rotate(360deg); }
   }
 
   #loader p {
     margin-top: 20px;
     font-size: 25px;
     max-width: 400px;
-    opacity: 0;
-    animation: fadeIn 3s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(20px);}
-    100% { opacity: 1; transform: translateY(0);}
   }
 
   #enterBtn {
@@ -115,7 +92,16 @@
     color: #0a0a0a;
   }
 
-  /* Transition loader */
+  #transitionLoader {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
   .transition-star {
     width: 130px;
     height: 130px;
@@ -123,15 +109,13 @@
     animation: spin 2s linear infinite;
   }
 
-  /* Main section */
   #main {
     display: none;
     width: 100%;
     min-height: 100vh;
-    position: relative;
     text-align: center;
-    overflow: hidden;
     padding: 80px 20px;
+    position: relative;
     z-index: 1;
   }
 
@@ -140,7 +124,6 @@
     font-size: 2rem;
   }
 
-  /* Produits */
   .product-section {
     display: flex;
     justify-content: center;
@@ -189,7 +172,6 @@
     font-size: 1.3rem;
   }
 
-  /* Shine effet sur hover */
   .product::after {
     content: "";
     position: absolute;
@@ -205,8 +187,8 @@
   }
 
   @keyframes shine {
-    0% { left: -75%; }
-    100% { left: 125%; }
+    from { left: -75%; }
+    to { left: 125%; }
   }
 
   #ctaBtn {
@@ -226,21 +208,16 @@
     color: #0a0a0a;
   }
 
-  /* Storytelling section */
+  /* Story section - ALWAYS visible */
   #story {
     margin-top: 120px;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 1s ease, transform 1s ease;
+    opacity: 1;
+    transform: none;
+    transition: none;
     max-width: 700px;
     margin-left: auto;
     margin-right: auto;
     font-size: 1.2rem;
-  }
-
-  #story.visible {
-    opacity: 1;
-    transform: translateY(0);
   }
 
   #story h2 {
@@ -248,7 +225,6 @@
     margin-bottom: 20px;
   }
 
-  /* Pop-up Shop Now */
   #shopPopup {
     display: none;
     position: fixed;
@@ -282,10 +258,8 @@
 </head>
 <body>
 
-<!-- Canvas Particules -->
 <canvas id="particles"></canvas>
 
-<!-- Loader / Intro -->
 <div id="loader">
   <div id="logoContainer">
     <img src="ASTROW.png" alt="ASTROW Logo" class="logo">
@@ -295,12 +269,10 @@
   <button id="enterBtn">Enter ASTROW World</button>
 </div>
 
-<!-- Transition Loader -->
 <div id="transitionLoader">
   <div class="transition-star"></div>
 </div>
 
-<!-- Main Section -->
 <div id="main">
   <div id="heroText">The first spark of ASTROW – Mini Drop Bonnet</div>
 
@@ -310,7 +282,6 @@
       <img src="blackbeanieback.png" alt="Bonnet Noir Dos" class="back">
       <h2>Black</h2>
     </div>
-
     <div class="product">
       <img src="whitebeaniefront.png" alt="Bonnet Blanc Avant" class="front">
       <img src="whitebeanieback.png" alt="Bonnet Blanc Dos" class="back">
@@ -320,7 +291,6 @@
 
   <button id="ctaBtn">Shop Now</button>
 
-  <!-- Storytelling -->
   <section id="story">
     <h2>ASTROW</h2>
     <p>Every drop expresses a chapter of growth.
@@ -330,18 +300,16 @@ It’s more than fashion; it’s your reminder to dream big, put in the work, an
   </section>
 </div>
 
-<!-- Pop-up Shop Now -->
 <div id="shopPopup">
   <h2>Ready to join ASTROW ?</h2>
   <button id="confirmShop">Yes !</button>
   <button id="cancelShop">Cancel</button>
 </div>
 
-<!-- Son d'ambiance -->
 <audio id="introSound" src="song.wav"></audio>
 
 <script>
-/* === Canvas Particules === */
+/* === Canvas étoiles === */
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -376,18 +344,12 @@ function animate() {
 }
 animate();
 
-/* === Scroll Parallaxe === */
-window.addEventListener('scroll', () => {
-  scrollOffset = window.scrollY;
-});
-
-/* === Resize Canvas === */
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
 
-/* === Loader / Transition === */
+/* === Loader transition === */
 const enterBtn = document.getElementById('enterBtn');
 const loader = document.getElementById('loader');
 const main = document.getElementById('main');
@@ -405,32 +367,14 @@ enterBtn.addEventListener('click', () => {
       transitionLoader.style.transition = "opacity 1s ease";
       transitionLoader.style.opacity = 0;
       setTimeout(() => {
-  transitionLoader.style.display = "none";
-  main.style.display = "block";
-
-  // make sure the story text appears after main is visible
-  const story = document.getElementById('story');
-  setTimeout(() => story.classList.add('visible'), 600);
-}, 1000);
-    }, 3000);
+        transitionLoader.style.display = "none";
+        main.style.display = "block"; // Le texte est déjà visible directement
+      }, 1000);
+    }, 2000);
   }, 800);
 });
 
-/* === Storytelling Scroll FIABLE === */
-window.addEventListener('scroll', () => {
-  const story = document.getElementById('story');
-  const rect = story.getBoundingClientRect();
-
-  // calcule le seuil selon l’écran
-  const triggerOffset = window.innerWidth < 768 ? 0.2 : 0.3; // 20% sur mobile, 30% sur PC
-
-  // Si la partie supérieure du bloc est visible à au moins triggerOffset de la hauteur de l’écran
-  if (rect.top < window.innerHeight * (1 - triggerOffset)) {
-    story.classList.add('visible');
-  }
-});
-
-/* === Shop Now Popup === */
+/* === Shop Popup === */
 const ctaBtn = document.getElementById('ctaBtn');
 const shopPopup = document.getElementById('shopPopup');
 const confirmShop = document.getElementById('confirmShop');
@@ -448,17 +392,7 @@ cancelShop.addEventListener('click', () => {
   shopPopup.style.display = 'none';
 });
 
-/* === Easter Egg Logo Redirection === */
+/* === Easter Egg Logo === */
 const logoContainer = document.getElementById('logoContainer');
 let clickCount = 0;
-logoContainer.addEventListener('click', () => {
-  clickCount++;
-  if (clickCount === 3) {
-    window.location.href = "https://tonliensecret.com";
-    clickCount = 0;
-  }
-});
-</script>
-
-</body>
-</html>
+logoContainer.addEventListener('click', ()
