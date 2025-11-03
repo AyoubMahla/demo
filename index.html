@@ -412,10 +412,13 @@ enterBtn.addEventListener('click', () => {
   }, 800);
 });
 
-/* === Storytelling Scroll === */
+/* === Storytelling Scroll Adaptatif === */
 window.addEventListener('scroll', () => {
   const story = document.getElementById('story');
-  if (window.scrollY + window.innerHeight > story.offsetTop + 100) {
+  // Si mobile : déclenche plus tôt, sinon plus tard
+  const triggerOffset = window.innerWidth < 768 ? 0 : 100;
+
+  if (window.scrollY + window.innerHeight > story.offsetTop + triggerOffset) {
     story.classList.add('visible');
   }
 });
