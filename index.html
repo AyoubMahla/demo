@@ -33,7 +33,7 @@
   width: 100%;
   height: 100%;
   z-index: 0;        /* Toujours derrière */
-  opacity: 0.2;      /* Peut ajuster pour plus de visibilité */
+  opacity: 0.7;      /* Peut ajuster pour plus de visibilité */
   pointer-events: none; /* Pour ne pas bloquer les clics */
 }
 
@@ -377,7 +377,9 @@ function animate() {
     // scintillement
     star.alpha += star.delta;
     if (star.alpha > 1 || star.alpha < 0.3) star.delta = -star.delta;
-    ctx.fillStyle = `rgba(255,255,255,${star.alpha})`;
+    ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(star.alpha * 1.8, 1)})`;
+ctx.shadowBlur = 8;             // effet de halo lumineux
+ctx.shadowColor = "white";      // halo blanc pur
     ctx.beginPath();
     ctx.arc(star.x, star.y + scrollOffset * 0.1, star.r, 0, 2 * Math.PI);
     ctx.fill();
