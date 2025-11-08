@@ -1,338 +1,81 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASTROW</title>
 <style>
-  /* Reset */
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  /* Import police OTF */
-  @font-face {
-    font-family: 'AstrowFont';
-    src: url('AstrowFont.ttf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  body, html {
-    width: 100%;
-    height: 100%;
-    font-family: 'AstrowFont';
-    background: #0a0a0a;
-    color: #fff;
-    overflow-x: hidden;
-  }
-
-  /* === Canvas Particules === */
-  #particles {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    opacity: 0.7;
-    pointer-events: none;
-  }
-
-  /* Loader / Intro */
-  #loader {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
-    flex-direction: column;
-    text-align: center;
-  }
-
-  #transitionLoader {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  #logoContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    cursor: pointer;
-  }
-
-  .logo {
-    width: 100px;
-    height: auto;
-  }
-
-  .star {
-    width: 100px;
-    height: 100px;
-    background: url('whitestar.png') no-repeat center/contain;
-    animation: spin 5s linear infinite;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg);}
-    100% { transform: rotate(360deg);}
-  }
-
-  #loader p {
-    margin-top: 20px;
-    font-size: 25px;
-    max-width: 400px;
-    opacity: 0;
-    animation: fadeIn 3s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(20px);}
-    100% { opacity: 1; transform: translateY(0);}
-  }
-
-  #enterBtn {
-    margin-top: 25px;
-    padding: 12px 25px;
-    border: 2px solid #fff;
-    background: transparent;
-    color: #fff;
-    cursor: pointer;
-    font-size: 25px;
-    transition: 0.3s;
-    font-family: 'AstrowFont';
-  }
-
-  #enterBtn:hover {
-    background: #fff;
-    color: #0a0a0a;
-  }
-
-  #transitionLoader {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  .transition-star {
-    width: 130px;
-    height: 130px;
-    background: url('whitestar.png') no-repeat center/contain;
-    animation: spin 2s linear infinite;
-  }
-
-  /* Main section */
-  #main {
-    display: none;
-    width: 100%;
-    min-height: 100vh;
-    position: relative;
-    text-align: center;
-    overflow: hidden;
-    padding: 80px 20px;
-    z-index: 1;
-  }
-
-  #heroText {
-    margin-bottom: 60px;
-    font-size: 2rem;
-  }
-
-  /* Produits */
-  .product-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 60px;
-    flex-wrap: wrap;
-  }
-
-  .product {
-    position: relative;
-    width: 250px;
-    cursor: pointer;
-    overflow: hidden;
-    animation: float 3s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
-
-  .product img {
-    width: 100%;
-    transition: opacity 0.5s ease;
-    display: block;
-  }
-
-  .product img.back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-  }
-
-  .product:hover img.front {
-    opacity: 0;
-  }
-
-  .product:hover img.back {
-    opacity: 1;
-  }
-
-  .product h2 {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 1.3rem;
-  }
-
-  .product::after {
-    content: "";
-    position: absolute;
-    top: 0; left: -75%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0.1), rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-    transform: skewX(-25deg);
-  }
-
-  .product:hover::after {
-    animation: shine 1s ease forwards;
-  }
-
-  @keyframes shine {
-    0% { left: -75%; }
-    100% { left: 125%; }
-  }
-
-  #ctaBtn {
-    margin-top: 70px;
-    padding: 15px 30px;
-    border: 2px solid #fff;
-    background: transparent;
-    color: #fff;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: 0.3s;
-    font-family: 'AstrowFont';
-  }
-
-  #ctaBtn:hover {
-    background: #fff;
-    color: #0a0a0a;
-  }
-
-  #story {
-    margin-top: 120px;
-    opacity: 1;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 1.2rem;
-  }
-
-  #story h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-  }
-
-  #shopPopup {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 10001;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-  }
-
-  #shopPopup button {
-    margin-top: 20px;
-    padding: 10px 25px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    border: 2px solid #fff;
-    background: transparent;
-    color: #fff;
-    font-family: 'AstrowFont';
-  }
-
-  #shopPopup button:hover {
-    background: #fff;
-    color: #0a0a0a;
-  }
+/* Ton CSS existant ici... */
+@font-face {
+  font-family: 'AstrowFont';
+  src: url('AstrowFont.ttf') format('opentype');
+}
+body, html {
+  width:100%; height:100%; margin:0; padding:0;
+  background:#000; font-family:'AstrowFont'; color:#fff;
+  display:flex; justify-content:center; align-items:center;
+  flex-direction:column; text-align:center; overflow:hidden;
+}
+canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+#content { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:20px; }
+#logoContainer { display:flex; align-items:center; gap:10px; }
+.logo { width:100px; height:auto; }
+.star { width:90px; height:90px; background:url('whitestar.png') no-repeat center/contain; animation: spin 5s linear infinite; }
+@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+#subtitle { font-size:26px; margin-bottom:0; }
+#comingSoon { font-size:18px; max-width:320px; line-height:1.3; }
+#formWrapper { display:flex; flex-direction:column; align-items:center; width:100%; max-width:480px; gap:15px; }
+#registerForm { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:rgba(255,255,255,0.05); padding:18px; border:2px solid #fff; border-radius:6px; width:100%; box-sizing:border-box; }
+#phoneRow { display:flex; justify-content:center; align-items:stretch; width:100%; gap:10px; }
+#phoneInput { background:rgba(255,255,255,0.15); border:none; border-radius:4px; color:#fff; text-align:center; padding:12px; font-family:'AstrowFont'; font-size:16px; height:20px; flex:1; }
+#countrySelect { background:rgba(255,255,255,0.15); border:none; border-radius:4px; color:#000; text-align:center; padding:12px; font-family:'AstrowFont'; font-size:16px; height:44px; flex:0 0 90px; }
+#confirmBtn { flex:0 0 110px; padding:12px; background:#fff; color:#000; border-radius:4px; cursor:pointer; transition:0.3s; font-family:'AstrowFont'; font-size:16px; height:46px; }
+#confirmBtn:hover { background:#000; color:#fff; }
+#consentWrapper { font-size:14px; color:#fff; width:100%; display:flex; align-items:center; gap:6px; justify-content:center; margin-top:5px; }
+#consentWrapper input { transform:scale(1.2); }
+#consentWrapper a { color:#00ffff; text-decoration:none; }
+#errorMessage { color:#ff4444; font-size:0.9rem; margin-top:5px; display:none; text-align:center; }
 </style>
 </head>
 <body>
 
-<!-- Canvas Particules -->
 <canvas id="particles"></canvas>
 
-<!-- Loader / Intro -->
-<div id="loader">
+<div id="content">
   <div id="logoContainer">
     <img src="ASTROW.png" alt="ASTROW Logo" class="logo">
     <div class="star"></div>
   </div>
-  <p>Aim the stars.</p>
-  <button id="enterBtn">Enter ASTROW World</button>
-</div>
 
-<!-- Transition Loader -->
-<div id="transitionLoader">
-  <div class="transition-star"></div>
-</div>
+  <div id="subtitle">Aim the stars.</div>
+  <div id="comingSoon">
+    Coming soon... Enter your number to be informed as soon as the drop is released!
+  </div>
 
-<!-- Main Section -->
-<div id="main">
-  <div id="heroText">The first spark of ASTROW – Mini Drop Beanie</div>
+  <div id="formWrapper">
+    <form id="registerForm">
+      <div id="phoneRow">
+        <select id="countrySelect">
+          <option value="+33">FR +33</option>
+          <option value="+1">US +1</option>
+          <option value="+44">UK +44</option>
+          <option value="+49">DE +49</option>
+          <option value="+212">MA +212</option>
+        </select>
+        <input type="tel" id="phoneInput" placeholder="Phone number" required>
+        <button type="submit" id="confirmBtn">Confirm</button>
+      </div>
+    </form>
 
-  <section class="product-section">
-    <div class="product">
-      <img src="blackbeaniefront.PNG" alt="Bonnet Noir Avant" class="front">
-      <img src="blackbeanieback.png" alt="Bonnet Noir Dos" class="back">
-      <h2>Black</h2>
+    <div id="consentWrapper">
+      <input type="checkbox" id="consentCheckbox" required>
+      <label for="consentCheckbox">
+        I consent to receive notifications from ASTROW.
+      </label>
     </div>
 
-    <div class="product">
-      <img src="whitebeaniefront.png" alt="Bonnet Blanc Avant" class="front">
-      <img src="whitebeanieback.png" alt="Bonnet Blanc Dos" class="back">
-      <h2>White</h2>
-    </div>
-  </section>
-
-  <button id="ctaBtn">Shop Now</button>
-
-  <section id="story">
-    <h2>ASTROW — A Saga to Wear</h2>
-    <p>ASTROW is more than clothing. It’s a journey, a living work of art. Each piece hides a clue, each drop tells a story.
-
-We don’t follow trends — we forge our own path and guide our community to a peak of emotion and discovery. When the final chapter comes, ASTROW will end, leaving a mark that lasts forever.
-
-Dare to explore. Dare to surpass..</p>
-  </section>
-</div>
-
-<div id="shopPopup">
-  <h2>Ready to join ASTROW ?</h2>
-  <button id="confirmShop">Yes !</button>
-  <button id="cancelShop">Cancel</button>
+    <div id="errorMessage"></div>
+  </div>
 </div>
 
 <script>
@@ -345,96 +88,68 @@ let stars = Array.from({ length: 100 }, () => ({
   x: Math.random() * canvas.width,
   y: Math.random() * canvas.height,
   r: Math.random() * 1.5 + 0.5,
-  speed: Math.random() * 0.5 + 0.05,
   alpha: Math.random() * 0.5 + 0.5,
-  delta: Math.random() * 0.02 + 0.005
+  delta: Math.random() * 0.02 + 0.005,
+  speed: Math.random() * 0.3 + 0.02
 }));
-
-let scrollOffset = 0;
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  stars.forEach(star => {
-    star.alpha += star.delta;
-    if (star.alpha > 1 || star.alpha < 0.3) star.delta = -star.delta;
-    ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(star.alpha * 1.8, 1)})`;
-    ctx.shadowBlur = 8;
-    ctx.shadowColor = "white";
+  stars.forEach(s => {
+    s.alpha += s.delta;
+    if (s.alpha > 1 || s.alpha < 0.3) s.delta = -s.delta;
+    ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
     ctx.beginPath();
-    ctx.arc(star.x, star.y + scrollOffset * 0.1, star.r, 0, 2 * Math.PI);
+    ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
     ctx.fill();
-    star.y += star.speed;
-    if (star.y > canvas.height) star.y = 0;
+    s.y += s.speed;
+    if (s.y > canvas.height) s.y = 0;
   });
   requestAnimationFrame(animate);
 }
 animate();
 
-window.addEventListener('scroll', () => {
-  scrollOffset = window.scrollY;
-});
+const form = document.getElementById('registerForm');
 
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const checkbox = document.getElementById('consentCheckbox');
+  const error = document.getElementById('errorMessage');
 
-const enterBtn = document.getElementById('enterBtn');
-const loader = document.getElementById('loader');
-const main = document.getElementById('main');
-const transitionLoader = document.getElementById('transitionLoader');
-
-enterBtn.addEventListener('click', () => {
-  loader.style.transition = "opacity 0.8s ease";
-  loader.style.opacity = 0;
-  setTimeout(() => {
-    loader.style.display = "none";
-    transitionLoader.style.display = "flex";
-    setTimeout(() => {
-      transitionLoader.style.transition = "opacity 1s ease";
-      transitionLoader.style.opacity = 0;
-      setTimeout(() => {
-        transitionLoader.style.display = "none";
-        main.style.display = "block";
-      }, 1000);
-    }, 3000);
-  }, 800);
-});
-
-window.addEventListener('scroll', () => {
-  const story = document.getElementById('story');
-  if (window.scrollY + window.innerHeight > story.offsetTop + 100) {
-    story.classList.add('visible');
+  if (!checkbox.checked) {
+    error.textContent = 'You must consent.';
+    error.style.display = 'block';
+    return;
   }
+
+  error.style.display = 'none';
+  const country = document.getElementById('countrySelect').value;
+  const phone = document.getElementById('phoneInput').value;
+
+  try {
+    const res = await fetch('https://astrow-coomingsoon.vercel.app/api/saveNumber', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ country, phone })
 });
 
-const ctaBtn = document.getElementById('ctaBtn');
-const shopPopup = document.getElementById('shopPopup');
-const confirmShop = document.getElementById('confirmShop');
-const cancelShop = document.getElementById('cancelShop');
 
-ctaBtn.addEventListener('click', () => {
-  shopPopup.style.display = 'flex';
-});
 
-confirmShop.addEventListener('click', () => {
-  window.location.href = "https://yourshopifystore.com";
-});
-
-cancelShop.addEventListener('click', () => {
-  shopPopup.style.display = 'none';
-});
-
-const logoContainer = document.getElementById('logoContainer');
-let clickCount = 0;
-logoContainer.addEventListener('click', () => {
-  clickCount++;
-  if (clickCount === 3) {
-    window.location.href = "https://tonliensecret.com";
-    clickCount = 0;
+    if (res.ok) {
+      document.getElementById('content').innerHTML = '<div style="font-size:24px;">Your number has been registered!</div>';
+    } else {
+      const data = await res.json();
+      error.textContent = data?.message || 'Error sending data.';
+      error.style.display = 'block';
+    }
+  } catch (err) {
+    error.textContent = 'Network error, please try again.';
+    error.style.display = 'block';
+    console.error(err);
   }
 });
 </script>
+
 
 </body>
 </html>
