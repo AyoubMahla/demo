@@ -63,27 +63,27 @@ canvas {
   width:100%; box-sizing:border-box;
 }
 
-#phoneRow {
+#emailRow {
   display:flex; justify-content:center; align-items:stretch;
   width:100%; gap:10px; flex-wrap: nowrap;
 }
 
-#phoneInput, #countrySelect, #confirmBtn {
-  font-family:'AstrowFont'; font-size:16px;
+#emailInput, #confirmBtn {
+  font-size:16px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-#phoneInput {
+#confirmBtn {
+  font-size:16px;
+  font-family: 'AstrowFont';
+}
+
+
+#emailInput {
   background:rgba(255,255,255,0.15);
   border:none; border-radius:4px; color:#fff;
   text-align:center; padding:12px;
-  flex:1; min-width:120px;
-}
-
-#countrySelect {
-  background:rgba(255,255,255,0.15);
-  border:none; border-radius:4px;
-  color:#000; text-align:center; padding:12px;
-  flex:0 0 90px; height:46px;
+  flex:1; min-width:220px;
 }
 
 #confirmBtn {
@@ -122,16 +122,11 @@ canvas {
   #registerForm {
     padding: 12px;
   }
-  #phoneRow {
+  #emailRow {
     flex-wrap: nowrap;
     gap: 6px;
   }
-  #countrySelect {
-    flex: 0 0 70px;
-    font-size: 14px;
-    padding: 10px;
-  }
-  #phoneInput {
+  #emailInput {
     font-size: 14px;
     padding: 10px;
   }
@@ -155,20 +150,13 @@ canvas {
 
   <div id="subtitle">Aim the stars.</div>
   <div id="comingSoon">
-    Coming soon... Enter your number to be informed as soon as the drop is released!
+    Coming soon... Enter your email to be informed as soon as the drop is released!
   </div>
 
   <div id="formWrapper">
     <form id="registerForm">
-      <div id="phoneRow">
-        <select id="countrySelect">
-          <option value="+33">FR +33</option>
-          <option value="+1">US +1</option>
-          <option value="+44">UK +44</option>
-          <option value="+49">DE +49</option>
-          <option value="+212">MA +212</option>
-        </select>
-        <input type="tel" id="phoneInput" placeholder="Phone number" required>
+      <div id="emailRow">
+        <input type="email" id="emailInput" placeholder="Email address" required>
         <button type="submit" id="confirmBtn">Confirm</button>
       </div>
     </form>
@@ -226,19 +214,18 @@ form.addEventListener('submit', async e => {
   }
 
   error.style.display = 'none';
-  const country = document.getElementById('countrySelect').value;
-  const phone = document.getElementById('phoneInput').value;
+  const email = document.getElementById('emailInput').value;
 
   try {
-    const res = await fetch('https://astrow-coomingsoon.vercel.app/api/saveNumber', {
+    const res = await fetch('https://astrow-coomingsoon.vercel.app/api/saveEmail', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ country, phone })
+      body: JSON.stringify({ email })
     });
 
     if (res.ok) {
       document.getElementById('content').innerHTML =
-        '<div style="font-size:24px;">Your number has been registered!</div>';
+        '<div style="font-size:24px;">Your email has been registered!</div>';
     } else {
       const data = await res.json();
       error.textContent = data?.message || 'Error sending data.';
